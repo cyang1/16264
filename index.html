@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <!-- Always force latest IE rendering engine or request Chrome Frame -->
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+  <meta http-equiv="cleartype" content="on">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Use title if it's in the page YAML frontmatter -->
+  <title>Humanoids Assignment 1</title>
+  <meta name="description" content="">
+  <meta name="author" content="Cary Yang, Jeff Chen">
+
+  <link rel="stylesheet" href="stylesheets/global-6521834d.css" media="all">
+  <link rel="stylesheet" href="stylesheets/layout-72c7f904.css" media="all and (min-width: 33.236em)">
+  <!-- 30em + (1.618em * 2) = 33.236em / Eliminates potential of horizontal scrolling in most cases -->
+
+  <!--[if (lt IE 9) & (!IEMobile)]>
+  <link rel="stylesheet" href="css/layout.css" media="all">
+  <![endif]-->
+
+  <link href="stylesheets/all-da39a3ee.css" media="screen" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:300,400" />
+  <script src="javascripts/all-4c7cd37e.js" type="text/javascript"></script>
+</head>
+
+<body class="index">
+  <div id="container" class="cf">
+    <div id="main" role="main" class="cf">
+      <p><header></p>
+
+<h1>Inverse Kinematics <span>Humanoids Assignment 1</span></h1>
+
+<p></header></p>
+
+<h3>Jeff Chen (jchen4), Cary Yang (caryy)</h3>
+
+<p>Since the provided Matlab code already moves the arm to minimize a cost function, all we did was define a function <code>f</code> that returns the distance between the grabber and the target, or <code>dot(fk(x) - x_d’, fk(x) - x_d’)</code>. This works because as Matlab minimizes the output of <code>f()</code>, the distance between the grabber and target will necessarily decrease. Next, to ensure that the grabber can actually grab the target at the end of the optimization, we set the value of <code>ceq</code> in constraints.m to simply be <code>fk(x) - x_d’</code>. When Matlab minimizes <code>f()</code>, it also makes sure that at the end of the minimization <code>ceq() = 0</code>.</p>
+
+<p>We have attached a diagram of where the arm can reach. The diagram was created by simply stepping through the possible arm positions, given the joint angle limits (using six nested <code>for</code> loops). While the diagram doesn’t provide exact <code>(x, y, angle)</code> values, it would be a simple extension to show, for example, the maximum and minimum <code>x</code> and <code>y</code> values the arm can reach.</p>
+
+<p>Allowing the robot to rotate the elbow into the other configuration adds significantly to the range of the arm. Attached is a diagram showing where the arm can reach with the elbow in the original position in blue, and where the arm can reach with the elbow rotated in red.</p>
+
+    </div>
+  </div>
+</body>
+</html>
