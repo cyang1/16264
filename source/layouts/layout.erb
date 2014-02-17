@@ -12,16 +12,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Use title if it's in the page YAML frontmatter -->
-  <title><%= current_page.data.title || "Humanoids" %></title>
-  <meta name="description" content="">
+  <title><%= current_page.data.title || "Humanoids - Cary Yang, Jeff Chen" %></title>
+  <meta name="description" content="Websites detailing out methods and techniques for assignments from CMU's 16-264: Humanoids.">
   <meta name="author" content="Cary Yang, Jeff Chen">
 
-  <link rel="stylesheet" href="stylesheets/global.css" media="all">
-  <link rel="stylesheet" href="stylesheets/layout.css" media="all and (min-width: 33.236em)">
+  <%= stylesheet_link_tag "global", media: "all" %>
+  <%= stylesheet_link_tag "layout", media: "all and (min-width: 33.236em)" %>
   <!-- 30em + (1.618em * 2) = 33.236em / Eliminates potential of horizontal scrolling in most cases -->
 
   <!--[if (lt IE 9) & (!IEMobile)]>
-  <link rel="stylesheet" href="css/layout.css" media="all">
+  <%= stylesheet_link_tag "layout", media: "all" %>
   <![endif]-->
 
   <%= stylesheet_link_tag "all" %>
