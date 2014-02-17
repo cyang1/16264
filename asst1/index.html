@@ -13,21 +13,20 @@
 
   <!-- Use title if it's in the page YAML frontmatter -->
   <title>Humanoids Assignment 1</title>
-  <meta name="description" content="">
+  <meta name="description" content="Websites detailing out methods and techniques for assignments from CMU's 16-264: Humanoids.">
   <meta name="author" content="Cary Yang, Jeff Chen">
 
   <link href="../stylesheets/global-6521834d.css" media="all" rel="stylesheet" type="text/css" />
   <link href="../stylesheets/layout-72c7f904.css" media="all and (min-width: 33.236em)" rel="stylesheet" type="text/css" />
-
   <!-- 30em + (1.618em * 2) = 33.236em / Eliminates potential of horizontal scrolling in most cases -->
 
   <!--[if (lt IE 9) & (!IEMobile)]>
   <link href="../stylesheets/layout-72c7f904.css" media="all" rel="stylesheet" type="text/css" />
   <![endif]-->
 
-  <link href="../stylesheets/all-da39a3ee.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="../stylesheets/all-85e2107b.css" media="screen" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:300,400" />
-  <script src="../javascripts/all-4c7cd37e.js" type="text/javascript"></script>
+  <script src="../javascripts/all-bf42cf25.js" type="text/javascript"></script>
 </head>
 
 <body class="asst1 asst1_index">
@@ -42,6 +41,10 @@
 <h3>Jeff Chen (jchen4), Cary Yang (caryy)</h3>
 
 <p>Since the provided Matlab code already moves the arm to minimize a cost function, all we did was define a function <code>f</code> that returns the distance between the grabber and the target, or <code>dot(fk(x) - x_d’, fk(x) - x_d’)</code>. This works because as Matlab minimizes the output of <code>f()</code>, the distance between the grabber and target will necessarily decrease. Next, to ensure that the grabber can actually grab the target at the end of the optimization, we set the value of <code>ceq</code> in constraints.m to simply be <code>fk(x) - x_d’</code>. When Matlab minimizes <code>f()</code>, it also makes sure that at the end of the minimization <code>ceq() = 0</code>.</p>
+
+<p><aside id="chart">
+    <svg></svg>
+</aside></p>
 
 <p>We have attached a diagram of where the arm can reach. The diagram was created by simply stepping through the possible arm positions, given the joint angle limits (using six nested <code>for</code> loops). While the diagram doesn’t provide exact <code>(x, y, angle)</code> values, it would be a simple extension to show, for example, the maximum and minimum <code>x</code> and <code>y</code> values the arm can reach.</p>
 
