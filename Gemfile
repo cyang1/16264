@@ -18,4 +18,11 @@ end
 # Fast deploying to Github
 gem "middleman-deploy"
 
+# GitHub flavored markdown engine.
 gem "redcarpet", "~> 3.1.0"
+
+# Graph library
+gem "nvd3-rails", :path => "lib/nvd3-rails", :require => false
+
+# Icons!
+gem "ionicons-rails", "~> 1.4.1.0", :require => false

@@ -26,7 +26,6 @@
 
   <%= stylesheet_link_tag "all" %>
   <%= google_font_link_tag 'Open Sans', [ '300', '400' ] %>
-  <%= javascript_include_tag  "all" %>
 </head>
 
 <body class="<%= page_classes %>">
@@ -35,5 +34,7 @@
       <%= yield %>
     </div>
   </div>
+  <%# Load this at the end so that the page laods faster. %>
+  <%= javascript_include_tag  "all" %>
 </body>
 </html>

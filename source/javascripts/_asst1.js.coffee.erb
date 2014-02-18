@@ -1,0 +1,48 @@
+#= require vendor/queue
+#= require vendor/zepto
+
+# Scope this to only the asst1 page.
+if $('body').hasClass('asst1')
+  graphData = (data, data_rev) ->
+    nv.addGraph ->
+      width = 400
+      height = 400
+
+      chart = nv.models.scatterChart()
+                       .color(d3.scale.category10().range())
+                       .forceX([-1.1, 1.1])
+                       .forceY([-1.1, 1.1])
+                       .width(width)
+                       .height(height)
+                       .margin(top: 20, right: 20, bottom: 40, left: 40)
+
+      # Axis settings
+      chart.xAxis.tickFormat(d3.format('.01f'))
+                 .tickValues(d3.range(-1.2, 1.2, 0.2))
+      chart.yAxis.tickFormat(d3.format('.01f'))
+
+      fullData =
+        [
+          key: 'Normal Elbow'
+          values: data
+        ,
+          key: 'Reversed Elbow'
+          values: data_rev
+        ]
+
+      d3.select('#chart')
+          .append('svg')
+          .datum(fullData)
+          .transition().duration(500)
+          .attr('height', height)
+          .call(chart)
+
+      return chart
+
+  if $.browser.ie
+    $('#chart').append('<%= image_tag "asst1graph.png" %>')
+  else
+    queue()
+      .defer(d3.csv, 'arm_positions.csv')
+      .defer(d3.csv, 'arm_positions_rev.csv')
+      .await(graphData);
