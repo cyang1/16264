@@ -24,7 +24,7 @@
   <link href="../stylesheets/layout-72c7f904.css" media="all" rel="stylesheet" type="text/css" />
   <![endif]-->
 
-  <link href="../stylesheets/all-02970c3d.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="../stylesheets/all-34861848.css" media="screen" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:300,400" />
 </head>
 
@@ -41,8 +41,8 @@
 
 <p>Since the provided Matlab code already moves the arm to minimize a cost function, all we did was define a function <code>f</code> that returns the distance between the grabber and the target, or <code>dot(fk(x) - x_d’, fk(x) - x_d’)</code>. This works because as Matlab minimizes the output of <code>f()</code>, the distance between the grabber and target will necessarily decrease. Next, to ensure that the grabber can actually grab the target at the end of the optimization, we set the value of <code>ceq</code> in constraints.m to simply be <code>fk(x) - x_d’</code>. When Matlab minimizes <code>f()</code>, it also makes sure that at the end of the minimization <code>ceq() = 0</code>.</p>
 
-<p><aside id="chart">
-    <h4 class="chart-title">Reachable Positions</h4>
+<p><aside class="figure" id="chart">
+    <h4 class="figure-title">Reachable Positions</h4>
 </aside></p>
 
 <p>We have attached a diagram of where the arm can reach. The diagram was created by simply stepping through the possible arm positions, given the joint angle limits (using six nested <code>for</code> loops). While the diagram doesn’t provide exact <code>(x, y, angle)</code> values, it would be a simple extension to show, for example, the maximum and minimum <code>x</code> and <code>y</code> values the arm can reach.</p>
