@@ -12,7 +12,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <!-- Use title if it's in the page YAML frontmatter -->
-  <title>Humanoids Assignment 1</title>
+  <title>Humanoids Assignment 3</title>
   <meta name="description" content="Websites detailing out methods and techniques for assignments from CMU's 16-264: Humanoids.">
   <meta name="author" content="Cary Yang, Jeff Chen">
 
@@ -37,32 +37,42 @@
 
 </head>
 
-<body class="asst1 asst1_index">
+<body class="asst3 asst3_index">
   <div id="container" class="cf">
     <div id="main" role="main" class="cf">
       <p><header></p>
 
-<h1>Inverse Kinematics <span>Humanoids Assignment 1</span></h1>
+<h1>Control <span>Humanoids Assignment 3</span></h1>
 
 <p></header></p>
 
-<h3>Jeff Chen (jchen4), Cary Yang (caryy)</h3>
+<h3>Jeff Chen (jchen4), Cary Yang (caryy), Jeffrey Kim (jmkim1)</h3>
 
-<p>Since the provided Matlab code already moves the arm to minimize a cost function, all we did was define a function <code>f</code> that returns the distance between the grabber and the target, or <code>dot(fk(x) - x_d’, fk(x) - x_d’)</code>. This works because as Matlab minimizes the output of <code>f()</code>, the distance between the grabber and target will necessarily decrease. Next, to ensure that the grabber can actually grab the target at the end of the optimization, we set the value of <code>ceq</code> in constraints.m to simply be <code>fk(x) - x_d’</code>. When Matlab minimizes <code>f()</code>, it also makes sure that at the end of the minimization <code>ceq() = 0</code>.</p>
+<h4>Part 1</h4>
 
-<p><aside class="figure" id="chart">
-    <h4 class="figure-title">Reachable Positions</h4>
+<p>From class, we were given the equation <code>rest_leg_length = leg_length_default + (a * (height_desired - h(b)) + b) + c * (height_desired - last_max_height)</code>, where <code>a</code>, <code>b</code>, and <code>c</code> are constants, and <code>h(x)</code> is the maximum height obtained from a leg length of <code>leg_length_default + x</code>.</p>
+
+<p>Arbitrarily, we chose <code>b</code> to be <code>0.015</code>, and obtained <code>h(b) = 0.7</code>. To find <code>a</code>, we interpolated the maximum height value across a number of leg lengths, and chose a slope of <code>0.03</code>.</p>
+
+<p><aside class="figure" id="graph_part_1">
+    <h4 class="figure-title">Part 1 - <code>height_desired</code></h4>
 </aside></p>
 
-<p>We have attached a diagram of where the arm can reach. The diagram was created by simply stepping through the possible arm positions, given the joint angle limits (using six nested <code>for</code> loops). While the diagram doesn’t provide exact <code>(x, y, angle)</code> values, it would be a simple extension to show, for example, the maximum and minimum <code>x</code> and <code>y</code> values the arm can reach.</p>
+<p>Finally, <code>c</code> controls the strength of the feedback control. We simply assigned it arbitrary values until we found one that worked well, which was <code>0.1</code>. So our final equation is <code>rest_leg_length = leg_length_default + (0.03 * (height_desired - 0.7) + 0.015) + 0.1 * (height_desired - last_max_height)</code>.</p>
 
-<p>Allowing the robot to rotate the elbow into the other configuration adds significantly to the range of the arm. Attached is a diagram showing where the arm can reach with the elbow in the original position in blue, and where the arm can reach with the elbow rotated in red.</p>
+<h4>Part 2</h4>
+
+<p>To find gains <code>hip_air_k</code> and <code>hip_air_b</code> that would fit the requirements, we simply tested arbitrary values. We settled on <code>hip_air_k = 50</code> and <code>hip_air_b = 4</code>, which cause the leg to swing to the desired target without oscillation in about 0.28 seconds.</p>
+
+<p><aside class="figure" id="graph_part_2">
+    <h4 class="figure-title">Part 2</h4>
+</aside></p>
 
 <div id="download-btn-container">
-    <a href="ass1-arm.zip" class="btn blue" role="button">
-        <i class="icon ion-code-download"></i>
-        Download Our Code
-    </a>
+  <a href="asst3_parts1_2.zip" class="btn blue" role="button">
+    <i class="icon ion-code-download"></i>
+    Download Our Code
+  </a>
 </div>
 
     </div>
