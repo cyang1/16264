@@ -27,6 +27,10 @@ To find gains `hip_air_k` and `hip_air_b` that would fit the requirements, we si
 	<h4 class="figure-title">Part 2</h4>
 </aside>
 
+#### Part 3
+
+We used and implemented one of Raibert's formulas (the one on page 692) from the [paper](http://repository.upenn.edu/cgi/viewcontent.cgi?article=1414&context=ese_papers) you posted on Q&A. We ultimately came up with this equation: `leg_angle_desired = asin(((xd * last_bounce_time / 2) + 0.024 * (xd - 2 * speed_desired)) / leg_length)` after playing around with gain and multiplying xd by some constants. We also assigned arbitrary values for `hip_grnd_k` and `hip_grnd_b` (`30` and `5` respectively). This worked for `height_desired` values from `0.6` to `0.76` with the correct speed and roughly correct height.
+
 <div id="download-btn-container">
   <a href="asst3_parts1_2.zip" class="btn blue" role="button">
     <i class="icon ion-code-download"></i>
