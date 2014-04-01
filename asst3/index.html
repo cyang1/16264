@@ -24,7 +24,7 @@
   <link href="../stylesheets/layout-72c7f904.css" media="all" rel="stylesheet" type="text/css" />
   <![endif]-->
 
-  <link href="../stylesheets/all-34861848.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="../stylesheets/all-f2908320.css" media="screen" rel="stylesheet" type="text/css" />
   <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:300,400,700,300italic,400italic,700italic" />
 <!--[if IE]>
 <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:300" />
@@ -72,12 +72,44 @@
   <a href="asst3_parts1_2.zip" class="btn blue" role="button">
     <i class="icon ion-code-download"></i>
     Download Our Code
+    <div class="description">(Parts 1 and 2)</div>
+  </a>
+</div>
+
+<h4>Part 3</h4>
+
+<p>We used and implemented one of Raibert&rsquo;s formulas (the one on page 692) from the <a href="http://repository.upenn.edu/cgi/viewcontent.cgi?article=1414&amp;context=ese_papers">paper</a> you posted on Q&amp;A. We ultimately came up with the equation: <code>leg_angle_desired = asin(((xd * last_bounce_time / 2) + 0.024 * (xd - 2 * speed_desired)) / leg_length)</code> after playing around with gain and multiplying <code>speed_desired</code> by a constant. This worked for <code>height_desired</code> values from <code>0.6</code> to <code>0.74</code> and results in the desired speed and roughly the desired height.</p>
+
+<p><aside class="figure" id="graph_part_3">
+    <h4 class="figure-title">Part 3 - <code>speed_desired</code></h4>
+</aside></p>
+
+<p>Contrary to the suggestions in the assignment handout, we had to change the equation obtained from Part 1 to remove the portion that supplied feedback control since the power is now directed at an angle and we would therefore not reach the correct height. We also attempted to account for this by adjusting the target distance in the equation to <code>height_desired / cos(leg_angle_desired)</code>, but this didn&rsquo;t seem to change the height reached too much.</p>
+
+<p>To find values for <code>hip_grnd_k</code> and <code>hip_grnd_b</code> that worked, we just tested arbitrary values until the variation in <code>hip_angle</code> seemed small enough. We ended up with <code>hip_grnd_k = 7.5</code> and <code>hip_grnd_b = 4</code>.</p>
+
+<p><aside class="figure" id="graph_part_3_1">
+    <h4 class="figure-title">Part 3 - <code>hip_angle</code></h4>
+</aside></p>
+
+<h5>Unanswered Questions</h5>
+
+<ol>
+<li>Why does Raibert&rsquo;s formula in its original form not work correctly?</li>
+<li>Why does our method have an odd oscillation before settling to the correct speed?</li>
+</ol>
+
+<div id="download-btn-container">
+  <a href="asst3_part3.zip" class="btn blue" role="button">
+    <i class="icon ion-code-download"></i>
+    Download Our Code
+    <div class="description">(Parts 3)</div>
   </a>
 </div>
 
     </div>
   </div>
   
-  <script src="../javascripts/all-4fa7cac9.js" type="text/javascript"></script>
+  <script src="../javascripts/all-36eb8cc3.js" type="text/javascript"></script>
 </body>
 </html>
