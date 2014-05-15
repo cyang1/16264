@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+
+  <!-- Always force latest IE rendering engine or request Chrome Frame -->
+  <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+  <meta http-equiv="cleartype" content="on">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Use title if it's in the page YAML frontmatter -->
+  <title>Humanoids Final Project</title>
+  <meta name="description" content="Websites detailing out methods and techniques for assignments from CMU's 16-264: Humanoids.">
+  <meta name="author" content="Cary Yang, Jeff Chen">
+
+  <link href="../stylesheets/global-6521834d.css" media="all" rel="stylesheet" type="text/css" />
+  <link href="../stylesheets/layout-72c7f904.css" media="all and (min-width: 33.236em)" rel="stylesheet" type="text/css" />
+  <!-- 30em + (1.618em * 2) = 33.236em / Eliminates potential of horizontal scrolling in most cases -->
+
+  <!--[if (lt IE 9) & (!IEMobile)]>
+  <link href="../stylesheets/layout-72c7f904.css" media="all" rel="stylesheet" type="text/css" />
+  <![endif]-->
+
+  <link href="../stylesheets/all-0f2efb98.css" media="screen" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:300,400,700,300italic,400italic,700italic" />
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:300" />
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:400" />
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:700" />
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:300italic" />
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:400italic" />
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open Sans:700italic" />
+<![endif]-->
+
+</head>
+
+<body class="project project_index">
+  <div id="container" class="cf">
+    <div id="main" role="main" class="cf">
+      <p><header></p>
+
+<h1>Stereo Imaging <span>Humanoids Final Project</span></h1>
+
+<p></header></p>
+
+<h3>Jeff Chen (jchen4), Cary Yang (caryy)</h3>
+
+<h4>Introduction</h4>
+
+<p>Stereo imaging is the determination of depth information from pairs of images of the same scene from different perspectives. It is particularly interesting due to the fact that live depth information can be derived using conventional, inexpensive webcams, and can replace expensive, specialty hardware, like the Kinect. Stereo imaging is a complex problem, and involves three main steps, rectification, correspondence, and reprojection.</p>
+
+<h4>Rectification</h4>
+
+<p>Stereo rectification is the process of mathematically row-aligning images. Here, row-aligned means that the cameras are coplanar, and that each row of the images have the same y-coordinate. Note that it would be exceedingly difficult, though possible, to align two identical cameras to be coplanar to skip this step.</p>
+
+<p><aside>
+<div class="figure">
+  <img src="../images/rectification-3ee304b2.png" />
+  <h4 class="figure-title">Figure 1: Rectification process</h4>
+</div>
+</aside></p>
+
+<p>Stereo rectification need only be run one time for a given camera setup. However, it must be run on a scene with distinctive characteristics. Generally, a chessboard is suitable for this, since one can easily find the corners of the chessboard. Going forward, we will assume that we are working with two undistorted images of the same scene, whose primary component is a non-square chessboard with easily distinguishable corners. Let&rsquo;s call the vectors storing these corners <em>C1</em> and <em>C2</em>, where the position of each corner is the same in each vector. Also, we will assign <em>(x, y)</em> coordinates for each corner, starting with <em>(0, 0)</em> at the top left corner through <em>(w - 1, h - 1)</em> for the bottom right.</p>
+
+<p>Next, we introduce two matrices: the essential matrix <em>E</em> and the fundamental matrix <em>F</em>. The essential matrix <em>E</em> contains information about the translation <em>T</em> and rotation <em>R</em> that describe the location of the second camera in relation to the first. The fundamental matrix <em>F</em> contains the same information, as well as the intrinsics for both cameras, which encompass focal length, image format, and principal point. OpenCV provides the function <code>cv::findFundamentalMat()</code>, which, when given the two sets of corners, outputs the fundamental matrix of that particular setup. Assuming more than 8 points are output, OpenCV will use the RANSAC algorithm to find the matrix. In our case, since we used two of the same camera, the camera intrinsics are basically equivalent, so we do not need to adjust for this.</p>
+
+<p><aside></p>
+
+<div class="figure">
+  <img src="../images/tsucuba_left-82484197.png" />
+  <h4 class="figure-title">Figure 2: Rectified left-eye image</h4>
+</div>
+
+<p></p>
+
+<div class="figure">
+  <img src="../images/tsucuba_right-58e37614.png" />
+  <h4 class="figure-title">Figure 3: Rectified right-eye image</h4>
+</div>
+
+<p></p>
+
+<div class="figure">
+  <img src="../images/tsucuba_sgbm_bs1_md64-64588e2e.png" />
+  <h4 class="figure-title">Figure 4: Result</h4>
+  Lighter is closer, darker is further away, black is undefined (couldn&rsquo;t find a disparity result for that pixel). The undefined disparities in this image are mostly due to occlusion.
+</div>
+
+<p></aside></p>
+
+<p>The next step is to find matrices that will row-align the images. For this, we use Bouguet&rsquo;s algorithm, which attempts to minimze distortion while maximizing common viewing area given the essential matrix. To minimize distortion, we split the rotation matrix <em>R</em> in half, so each image rotates half of <em>R</em> to align their planes. This rotation makes the images coplanar, but not row-aligned. Next, we compute the recitified left and right camera matrices, as well as projection matrices <em>Pl</em> and <em>Pr</em>. From these, we can calculate the reprojection matrix <em>Q</em>, which will come in handy later. OpenCV provides the functions <code>cv::StereoRectify()</code> and <code>cv::initUndistortRectifyMap()</code>,which do the above steps, and output the matrices necessary to row-align a pair of images.</p>
+
+<h4>Correspondence</h4>
+
+<p>Stereo correspondence matches features in the left and right images, outputting a disparity which is the difference in x-coordinates of the feature viewed in the two cameras.</p>
+
+<p>The stereo correspondence algorithm used in our implementation is semi-global block matching, which we found to be an adequate balance of runtime and accuracy. Whereas classic block matching simply matches windows around a pixel against other windows in some search space, which is inherently local, semi-global block matching defines a cost function <em>C(p, d)</em>, which is the closer to 0 if the pixel <em>p</em> in one image is very similar to the pixel at disparity <em>d</em> in the second image, and then attempts to minimize the aggregated costs along multiple paths for a given disparity (usually 8, equally spaced around the pixel). The disparity for which this aggregated cost is minimized is chosen as the disparity at that pixel.</p>
+
+<p>In OpenCV, semi-global block matching is performed by constructing a <code>cv::StereoSGBM</code> functor and calling it with parameters <code>left_img, right_img, output_disparity</code>, where <code>output_disparity</code> is the image where the disparity results that are calculated are placed.</p>
+
+<h4>Reprojection</h4>
+
+<p>Since we have calculated the reprojection matrix <em>Q</em> in the rectification step, it is a simple matter to find the depth of a point <em>(x, y)</em> with disparity <em>d</em>: we multiply <em>Q</em> and the matrix <em>[[x] [y] [d] [1]]</em> to obtain <em>[[X] [Y] [Z] [W]]</em>, where the final 3D coordinates are <em>(X/W, Y/W, Z/W)</em>. OpenCV provides the function <code>cv::reprojectImageTo3D()</code>, which takes a disparity image and reprojection matrix and transforms each pixel&rsquo;s <em>(x, y)</em> coordinates to the corresponding 3D point.</p>
+
+<h4>Further Research</h4>
+
+<ol>
+<li>Our rectification process seems very brittle, producing useful matrices only about 50% of the time. This could be due to a variety of factors, such as how far apart our webcams were, the distance of the checkerboard from the cameras, or maybe the orientation of each of the cameras. If we continued this project, we would look into the reasons behind this issue.</li>
+<li>Alternative stereo correspondence algorithms to produce more accurate results.</li>
+</ol>
+
+<div id="download-btn-container">
+  <a href="stereo_cam_project.zip" class="btn blue" role="button">
+    <i class="icon ion-code-download"></i>
+    Download Our Code
+  </a>
+</div>
+
+    </div>
+  </div>
+  
+  <script src="../javascripts/all-36eb8cc3.js" type="text/javascript"></script>
+</body>
+</html>
